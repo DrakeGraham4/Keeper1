@@ -1,4 +1,4 @@
- using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -39,9 +39,13 @@ namespace Keeper1
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Keeper1", Version = "v1" });
             });
             services.AddScoped<IDbConnection>(x => CreateDbConnection());
-            
+
             services.AddScoped<AccountsRepository>();
             services.AddScoped<AccountService>();
+            services.AddTransient<KeepsRepository>();
+            services.AddTransient<KeepsService>();
+            services.AddTransient<VaultsRepository>();
+            services.AddTransient<VaultsService>();
         }
 
         private void ConfigureCors(IServiceCollection services)
@@ -94,10 +98,10 @@ namespace Keeper1
             }
 
             app.UseHttpsRedirection();
-            
+
             app.UseDefaultFiles();
             app.UseStaticFiles();
-            
+
             app.UseRouting();
 
             app.UseAuthentication();
