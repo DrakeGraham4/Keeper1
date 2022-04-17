@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS keeps(
   views INT NOT NULL,
   kept INT NOT NULL,
   creatorId VARCHAR (255) NOT NULL,
-  FOREIGN KEY (creatorId) REFERENCES accounts(id)
+  FOREIGN KEY (creatorId) REFERENCES accounts(id) ON DELETE CASCADE
 ) default charset utf8 COMMENT '';
 CREATE TABLE IF NOT EXISTS vaults(
   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -22,7 +22,16 @@ CREATE TABLE IF NOT EXISTS vaults(
   description TEXT NOT NULL,
   isPrivate TINYINT NOT NULL DEFAULT 0,
   creatorId VARCHAR (255) NOT NULL,
-  FOREIGN KEY (creatorId) REFERENCES accounts(id)
+  FOREIGN KEY (creatorId) REFERENCES accounts(id) ON DELETE CASCADE
+) default charset utf8 COMMENT '';
+CREATE TABLE IF NOT EXISTS vaultKeeps(
+  id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+  creatorId VARCHAR(255) NOT NULL,
+  vaultId INT NOT NULL,
+  keepId INT NOT NULL,
+  FOREIGN key (creatorId) REFERENCES accounts(id) ON DELETE CASCADE,
+  FOREIGN key (vaultId) REFERENCES vaults(id) ON DELETE CASCADE,
+  FOREIGN key (keepId) REFERENCES keeps(id) ON DELETE CASCADE
 ) default charset utf8 COMMENT '';
 -- Keeps
 DROP TABLE keeps;

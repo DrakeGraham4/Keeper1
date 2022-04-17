@@ -53,11 +53,24 @@ namespace Keeper1.Services
             }
         }
 
+
         internal void Remove(int id, string userId)
         {
             Keep original = GetById(id);
             ValidateOwner(userId, original);
             _kRepo.Remove(id);
+        }
+
+
+        internal List<Keep> GetProfileKeeps(string id)
+        {
+            return _kRepo.GetProfileKeeps(id);
+
+        }
+
+        internal List<VKViewModel> GetKeepsByVaultId(int keepId)
+        {
+            return _kRepo.GetKeepsByVaultId(keepId);
         }
     }
 }

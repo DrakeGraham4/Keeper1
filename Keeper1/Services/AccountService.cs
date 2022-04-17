@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Keeper1.Models;
 using Keeper1.Repositories;
 
@@ -36,5 +38,7 @@ namespace Keeper1.Services
             original.Picture = editData.Picture.Length > 0 ? editData.Picture : original.Picture;
             return _repo.Edit(original);
         }
+
+
     }
 }

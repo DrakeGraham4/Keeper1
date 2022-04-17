@@ -10,18 +10,36 @@ using Microsoft.AspNetCore.Mvc;
 namespace Keeper1.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("[controller]")]
     public class AccountController : ControllerBase
     {
         private readonly AccountService _accountService;
+        private readonly VaultsService _vService;
 
-        public AccountController(AccountService accountService)
+        public AccountController(AccountService accountService, VaultsService vService)
         {
             _accountService = accountService;
+            _vService = vService;
         }
 
         [HttpGet]
-        [Authorize]
+
+        [HttpGet("vaults")]
+
+
+        public async Task<ActionResult<List<Vault>>> GetMyVaults()
+        {
+            try
+            {
+                Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
+                return Ok(_vService.GetMyVaults(userInfo));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
         public async Task<ActionResult<Account>> Get()
         {
             try
@@ -33,7 +51,12 @@ namespace Keeper1.Controllers
             {
                 return BadRequest(e.Message);
             }
+
+
         }
+
+
+
     }
 
 
