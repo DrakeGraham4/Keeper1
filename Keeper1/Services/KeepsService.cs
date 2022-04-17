@@ -19,7 +19,7 @@ namespace Keeper1.Services
             return _kRepo.GetAll();
         }
 
-        internal Keep GetById(int id)
+        internal Keep GetById(int id, Account userInfo)
         {
             return _kRepo.GetById(id);
         }
@@ -30,9 +30,9 @@ namespace Keeper1.Services
         }
 
 
-        internal Keep Update(Keep keepData)
+        internal Keep Update(Keep keepData, Account userInfo)
         {
-            Keep original = GetById(keepData.Id);
+            Keep original = GetById(keepData.Id, userInfo);
             ValidateOwner(keepData.CreatorId, original);
             original.Name = keepData.Name ?? original.Name;
             original.Description = keepData.Description ?? original.Description;
@@ -54,10 +54,8 @@ namespace Keeper1.Services
         }
 
 
-        internal void Remove(int id, string userId)
+        internal void Remove(int id)
         {
-            Keep original = GetById(id);
-            ValidateOwner(userId, original);
             _kRepo.Remove(id);
         }
 
@@ -68,9 +66,6 @@ namespace Keeper1.Services
 
         }
 
-        internal List<VKViewModel> GetKeepsByVaultId(int keepId)
-        {
-            return _kRepo.GetKeepsByVaultId(keepId);
-        }
+
     }
 }

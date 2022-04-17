@@ -93,5 +93,26 @@ namespace Keeper1.Repositories
             ";
             return _db.Query<Vault>(sql, new { id }).ToList();
         }
+
+        internal object GetKeepsByVaultId(int id)
+        {
+            string sql = @"
+            SELECT
+            a.*,
+            k.*,
+            vk.id AS VaultKeepId,
+            vk.vaultId
+            FROM vaultKeeps vk
+            JOIN keeps k ON k.id = vk.keepId
+            JOIN accounts a ON a.id = k.creatorId
+            WHERE vk.vaultId = @id;
+            ";
+            return _db.Query<Account, VKViewModel, VKViewModel>(sql, (a, vkvm) =>
+            {
+                vkvm.Creator = a;
+                return vkvm;
+
+            }, new { id }).ToList();
+        }
     }
 }

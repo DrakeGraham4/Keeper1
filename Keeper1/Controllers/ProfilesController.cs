@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using CodeWorks.Auth0Provider;
 using Keeper1.Models;
@@ -11,7 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace Keeper1.Controllers
 {
     [ApiController]
-    [Authorize]
     [Route("api/[controller]")]
     public class ProfilesController : ControllerBase
     {
@@ -28,11 +26,10 @@ namespace Keeper1.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Profile>> GetUsersProfile(string id)
+        public ActionResult<Profile> GetUsersProfile(string id)
         {
             try
             {
-                Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
                 Profile profile = _pService.GetUsersProfile(id);
                 return Ok(profile);
             }

@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Keeper1.Models;
 using Keeper1.Repositories;
 
@@ -28,8 +25,13 @@ namespace Keeper1.Services
             return found;
         }
 
-        internal VaultKeep Create(VaultKeep vaultKeepData)
+        internal VaultKeep Create(VaultKeep vaultKeepData, Account userInfo)
         {
+            Vault found = _vRepo.GetById(vaultKeepData.VaultId);
+            if (found.CreatorId != userInfo.Id)
+            {
+                throw new Exception("Hey guy, create your own Keep in your own vault");
+            }
             return _vkRepo.Create(vaultKeepData);
         }
 

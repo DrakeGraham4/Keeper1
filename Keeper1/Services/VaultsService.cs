@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Keeper1.Models;
 using Keeper1.Repositories;
 
@@ -17,9 +15,18 @@ namespace Keeper1.Services
             _vRepo = vRepo;
         }
 
-        internal Vault GetById(int id)
+        internal Vault GetById(int id, Account userInfo)
         {
-            return _vRepo.GetById(id);
+            Vault found = _vRepo.GetById(id);
+            if (found.CreatorId != userInfo?.Id && found.IsPrivate)
+            {
+                throw new Exception("This Vault is private");
+            }
+            if (found == null)
+            {
+                throw new Exception("This Vault does not exist .com");
+            }
+            return found;
         }
         internal Vault Create(Vault vaultData)
         {
@@ -27,9 +34,9 @@ namespace Keeper1.Services
         }
 
 
-        internal Vault Update(Vault vaultData)
+        internal Vault Update(Vault vaultData, Account userInfo)
         {
-            Vault original = GetById(vaultData.Id);
+            Vault original = GetById(vaultData.Id, userInfo);
             ValidateOwner(vaultData.CreatorId, original);
             original.Name = vaultData.Name ?? original.Name;
             original.Description = vaultData.Description ?? original.Description;
@@ -47,8 +54,8 @@ namespace Keeper1.Services
 
         internal void Remove(int id, string userId)
         {
-            Vault original = GetById(id);
-            ValidateOwner(userId, original);
+            Vault deleted = _vRepo.GetById(id);
+            ValidateOwner(userId, deleted);
             _vRepo.Remove(id);
         }
 
@@ -56,7 +63,7 @@ namespace Keeper1.Services
         {
             if (userId != vaultData.CreatorId)
             {
-                throw new Exception("You cannot edit a vault you did not make");
+                throw new Exception("You cannot edit/delete a vault you did not make");
             }
         }
 
@@ -70,6 +77,12 @@ namespace Keeper1.Services
             return vault;
 
 
+        }
+
+        internal object GetKeepsByVaultId(int id, Account userInfo)
+        {
+            Vault vault = GetById(id, userInfo);
+            return _vRepo.GetKeepsByVaultId(id);
         }
     }
 }

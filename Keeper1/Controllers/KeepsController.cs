@@ -9,7 +9,7 @@ using System;
 namespace Keeper1.Controllers
 {
     [ApiController]
-    [Authorize]
+
     [Route("api/[controller]")]
     public class KeepsController : ControllerBase
     {
@@ -21,11 +21,11 @@ namespace Keeper1.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<Keep>> GetAll()
+        public ActionResult<Keep> GetAll()
         {
             try
             {
-                Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
+
                 return Ok(_kService.GetAll());
 
             }
@@ -41,12 +41,14 @@ namespace Keeper1.Controllers
             try
             {
                 Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
-                Keep found = _kService.GetById(id);
+                Keep found = _kService.GetById(id, userInfo);
                 if (found == null)
                 {
                     throw new Exception("No Keep by that Id");
                 }
-                return found;
+                return Ok(found);
+
+
             }
             catch (Exception e)
             {
@@ -56,6 +58,7 @@ namespace Keeper1.Controllers
 
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<Keep>> Create([FromBody] Keep keepData)
         {
             try
@@ -73,6 +76,7 @@ namespace Keeper1.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<ActionResult<Keep>> Update(int id, [FromBody] Keep keepData)
         {
             try
@@ -80,7 +84,7 @@ namespace Keeper1.Controllers
                 Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
                 keepData.Id = id;
                 keepData.CreatorId = userInfo.Id;
-                Keep keep = _kService.Update(keepData);
+                Keep keep = _kService.Update(keepData, userInfo);
                 return Ok(keep);
             }
             catch (Exception e)
@@ -90,13 +94,19 @@ namespace Keeper1.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<ActionResult<string>> Remove(int id)
         {
             try
             {
                 Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
-                _kService.Remove(id, userInfo.Id);
-                return Ok("Deleted Keep");
+                Keep found = _kService.GetById(id, userInfo);
+                if (userInfo.Id != found.CreatorId)
+                {
+                    throw new Exception("You cannot remove this Keep");
+                }
+                _kService.Remove(id);
+                return Ok("Keep Removed");
             }
             catch (Exception e)
             {

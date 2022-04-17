@@ -23,7 +23,6 @@ namespace Keeper1.Controllers
             _vService = vService;
         }
 
-        [HttpGet]
 
         [HttpGet("vaults")]
 
@@ -40,6 +39,7 @@ namespace Keeper1.Controllers
                 return BadRequest(e.Message);
             }
         }
+        [HttpGet]
         public async Task<ActionResult<Account>> Get()
         {
             try
