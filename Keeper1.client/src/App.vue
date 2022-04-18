@@ -4,6 +4,7 @@
   </header>
   <main>
     <router-view />
+    <KeepDetailsModal />
   </main>
   <footer>
     <div class="bg-dark text-light text-center p-4">

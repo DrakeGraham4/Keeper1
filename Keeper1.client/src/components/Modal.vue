@@ -7,9 +7,9 @@
     >
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">
+          <div class="modal-title">
             <slot name="modal-title"></slot>
-          </h5>
+          </div>
           <button
             type="button"
             class="btn-close"

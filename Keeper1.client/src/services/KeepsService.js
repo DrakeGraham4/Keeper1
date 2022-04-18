@@ -6,7 +6,7 @@ class KeepsService{
     async getAll() {
         const res = await api.get('api/keeps')
         AppState.keeps = res.data
-        logger.log(res.data)
+        logger.log('keeps', res.data)
     }
 
 }
