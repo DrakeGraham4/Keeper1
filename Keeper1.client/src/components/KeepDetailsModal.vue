@@ -4,7 +4,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-6 p-0">
-                        <img class="w-100 object-fit-cover" :src="keep.img" alt=""/>
+                        <img class="w-100 object-fit-cover img-fluid" :src="keep.img" alt=""/>
                     </div>
                     <div class="col-md-6 p-2">
                         <div class="mt-3 d-flex">

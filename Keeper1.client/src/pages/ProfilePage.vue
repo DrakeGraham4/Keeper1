@@ -5,7 +5,10 @@
                 <img :src="profile.picture" alt=""/>
                 <div class="ms-3 d-flex flex-column justify-content-center">
                     <h1>{{profile.name}}</h1>
+                    <h6>Vaults: {{profileVaults.length}}</h6>
+                    <h6>Keeps: {{profileKeeps.length}}</h6>
                     {{profileVaults}}
+                    {{profileKeeps}}
                 </div>
             </div>
         </div>
@@ -35,6 +38,7 @@ export default {
             try {
                 await profilesService.getProfile(route.params.id)
                 await profilesService.getVaults(route.params.id)
+                await profilesService.getKeeps(route.params.id)
                 
             } catch (error) {
                 logger.error(error)
@@ -44,7 +48,8 @@ export default {
         return {
             profile: computed(() => AppState.profile),
             keeps: computed(() => AppState.keeps),
-            profileVaults: computed(() => AppState.profileVaults)
+            profileVaults: computed(() => AppState.profileVaults),
+            profileKeeps: computed(()=> AppState.profileKeeps)
         }
     }
 }

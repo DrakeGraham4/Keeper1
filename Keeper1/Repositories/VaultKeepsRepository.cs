@@ -1,4 +1,3 @@
-using System;
 using System.Data;
 using Dapper;
 using Keeper1.Models;
@@ -28,17 +27,13 @@ namespace Keeper1.Repositories
             return vaultKeepData;
         }
 
-        internal void Remove(int id, int keepId)
+        internal void Remove(int id)
         {
             string sql = @"
             DELETE FROM vaultKeeps
             WHERE id = @id LIMIT 1;
             ";
-            int rowsAffected = _db.Execute(sql, new { id, keepId });
-            if (rowsAffected < 0)
-            {
-                throw new Exception("Invalid Id");
-            }
+            _db.Execute(sql, new { id });
         }
 
         internal VaultKeep GetVaultKeepById(int id)

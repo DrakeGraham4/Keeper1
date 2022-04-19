@@ -88,10 +88,18 @@ namespace Keeper1.Repositories
         internal List<Vault> GetProfileVaults(string id)
         {
             string sql = @"
-            SELECT * FROM vaults 
-            WHERE vaults.creatorId = @id
+            SELECT 
+            a.*,
+            v.*
+            FROM vaults v
+            JOIN accounts a ON a.id = v.creatorId
+            WHERE v.creatorId = @id;
             ";
-            return _db.Query<Vault>(sql, new { id }).ToList();
+            return _db.Query<Account, Vault, Vault>(sql, (a, v) =>
+            {
+                v.Creator = a;
+                return v;
+            }, new { id }).ToList();
         }
 
         internal object GetKeepsByVaultId(int id)

@@ -69,12 +69,12 @@ namespace Keeper1.Services
 
         internal List<Vault> GetProfileVaults(string id, string userId)
         {
-            List<Vault> vault = _vRepo.GetProfileVaults(id);
+            List<Vault> v = _vRepo.GetProfileVaults(id);
             if (id != userId)
             {
-                return vault.FindAll(v => v.IsPrivate == false);
+                return v.FindAll(v => v.IsPrivate == false);
             }
-            return vault;
+            return v;
 
 
         }

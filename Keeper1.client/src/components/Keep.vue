@@ -5,14 +5,18 @@
  data-bs-target="#active-keep"
  @click="setActive">
   <img v-if="keep.img" :src="keep.img" class="card-img object-fit-contain" :alt="keep.name">
-  <div class="card-img-overlay">
-    <h5 class="card-title">{{keep.name}}</h5>
+  <div class="d-flex justify-content-between align-items-end card-img-overlay">
+    <h4 class="card-title">{{keep.name}}</h4>
+    <div>
+    <img :src="keep.creator?.picture" class="rounded-circle profile-img" @click="goToProfile(keep.creator.id)">
+        </div>
   </div>
 </div>
 </template>
 
 
 <script>
+import { useRouter } from 'vue-router'
 import { AppState } from '../AppState'
 import { keepsService } from '../services/KeepsService'
 import Pop from '../utils/Pop'
@@ -24,6 +28,7 @@ export default {
         }
     },
     setup(props){
+        const router = useRouter()
         return {
             async setActive(){
                 try {
@@ -32,6 +37,10 @@ export default {
                     logger.error(error)
                     Pop.toast(error.message, 'error')
                 }
+            },
+
+            goToProfile(id){
+                router.push({name: 'Profile', params: {id}})
             }
         }
     }
@@ -43,6 +52,11 @@ export default {
 .keepImg{
     object-fit: cover;
     
+}
+
+.profile-img{
+    width: 35px;
+    height: 35px;
 }
 
 

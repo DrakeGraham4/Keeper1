@@ -35,14 +35,14 @@ namespace Keeper1.Services
             return _vkRepo.Create(vaultKeepData);
         }
 
-        internal void Remove(int id, Account userinfo)
+        internal void Remove(int vaultKeepId, string userId)
         {
-            VaultKeep vaultKeep = GetVaultKeepById(id);
-            if (vaultKeep.CreatorId != userinfo.Id)
+            VaultKeep vaultKeep = GetVaultKeepById(vaultKeepId);
+            if (vaultKeep.CreatorId != userId)
             {
                 throw new Exception("That is not yours to delete");
             }
-            _vkRepo.Remove(id, vaultKeep.KeepId);
+            _vkRepo.Remove(vaultKeepId);
         }
 
 

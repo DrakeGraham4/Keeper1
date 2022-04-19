@@ -44,8 +44,8 @@ namespace Keeper1.Controllers
         {
             try
             {
-                Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
-                _vkService.Remove(id, userInfo);
+                Account user = await HttpContext.GetUserInfoAsync<Account>();
+                _vkService.Remove(id, user.Id);
                 return Ok("Deleted vaultkeep");
             }
             catch (Exception e)
