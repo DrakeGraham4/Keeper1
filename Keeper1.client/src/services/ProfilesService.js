@@ -14,6 +14,7 @@ class ProfilesService{
 
     async getKeeps(id) {
         const res = await api.get(`api/profiles/${id}/keeps`)
+        AppState.profileKeeps = res.data
     }
 }
 export const profilesService = new ProfilesService()

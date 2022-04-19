@@ -1,25 +1,58 @@
 <template>
     <div class="component container">
         <div class="row mt-4">
-            <div class="col-12 d-flex">
-                <img :src="profile.picture" alt=""/>
-                <div class="ms-3 d-flex flex-column justify-content-center">
+            <div class=" d-flex">
+               <div> <img :src="profile.picture" alt=""/></div>
+                <div class="ms-3 flex-column justify-content-center">
                     <h1>{{profile.name}}</h1>
                     <h6>Vaults: {{profileVaults.length}}</h6>
                     <h6>Keeps: {{profileKeeps.length}}</h6>
-                    {{profileVaults}}
-                    {{profileKeeps}}
-                </div>
-            </div>
-        </div>
+                    </div>
+                    </div>
+                    </div>
+                   <h2 style="color:purple;" class="mt-5">Vaults<i @click="createVault" class="mdi mdi-plus selectable"></i></h2>
+                   <div class="row d-flex flex-row"> 
+                    <div v-for="p in profileVaults" :key="p.id" class="col-md-4 p-1" > 
+                    <div class="card bg-primary selectable ">
+                        <div class="card-body">
+                            {{p.name}}
+                        </div>
+                    </div>
+                    </div>
+                </div> 
+            
+        
         <!-- <div class="masonry-with-columns">
             <div v-for="p in profileVaults" :key="p.id" >
                 
             </div>
         </div> -->
-
-
+            <h2 
+            class="mt-4" style="color:purple;">Keeps 
+                <i 
+                data-bs-toggle="modal"
+                data-bs-target="#create-keep" 
+                class="mdi mdi-plus selectable">
+                </i>
+                </h2>
+            <div class="masonry-with-columns">
+        <div v-for="pro in profileKeeps" :key="pro.id">
+            <div 
+            class="card selectable text-white m-3">
+            
+            <img :src="pro.img" class="card-img object-fit-contain" :alt="pro.name">
+            <div class="d-flex justify-content-between align-items-end card-img-overlay">
+            <h4 class="card-title">{{pro.name}}</h4>
+           </div>
+        </div>
+        </div>
+        </div>
+        <Modal id="create-keep">
+            <template #modal-title> Create Keep </template>
+            <template #modal-body><CreateKeepForm /> </template>
+        </Modal>
     </div>
+      <link rel="stylesheet" href="//cdn.materialdesignicons.com/5.4.55/css/materialdesignicons.min.css">
 </template>
 
 
@@ -46,6 +79,8 @@ export default {
             }
         })
         return {
+            
+
             profile: computed(() => AppState.profile),
             keeps: computed(() => AppState.keeps),
             profileVaults: computed(() => AppState.profileVaults),
@@ -57,5 +92,13 @@ export default {
 
 
 <style lang="scss" scoped>
+.masonry-with-columns {
+  columns: 6 200px;
+  column-gap: 1rem;
+  div {
+    display: inline-block;
+    width: 100%;
+  }
+}
 
 </style>

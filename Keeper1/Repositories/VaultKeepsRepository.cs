@@ -16,6 +16,10 @@ namespace Keeper1.Repositories
         internal VaultKeep Create(VaultKeep vaultKeepData)
         {
             string sql = @"
+            UPDATE keeps
+            SET
+            kept = kept + 1
+            WHERE id = @KeepId;
             INSERT INTO vaultKeeps
             (keepId, vaultId, creatorId)
             VALUES
@@ -34,6 +38,7 @@ namespace Keeper1.Repositories
             WHERE id = @id LIMIT 1;
             ";
             _db.Execute(sql, new { id });
+
         }
 
         internal VaultKeep GetVaultKeepById(int id)
