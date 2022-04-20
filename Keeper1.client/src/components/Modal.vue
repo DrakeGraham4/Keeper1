@@ -2,7 +2,7 @@
   <div class="modal fade" tabindex="-1">
     <div
       class="
-        modal-dialog modal-xl modal-dialog-centered modal-fullscreen-md-down
+        modal-dialog modal-lg modal-dialog-centered modal-fullscreen-md-down
       "
     >
       <div class="modal-content">

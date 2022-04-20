@@ -19,6 +19,7 @@
 import { useRouter } from 'vue-router'
 import { AppState } from '../AppState'
 import { keepsService } from '../services/KeepsService'
+import { logger } from '../utils/Logger'
 import Pop from '../utils/Pop'
 export default {
     props: {
@@ -33,6 +34,8 @@ export default {
             async setActive(){
                 try {
                     AppState.activeKeep = props.keep
+                    await keepsService.getById(props.keep.id)
+
                 } catch (error) {
                     logger.error(error)
                     Pop.toast(error.message, 'error')

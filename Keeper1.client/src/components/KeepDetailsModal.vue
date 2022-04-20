@@ -1,25 +1,69 @@
+
 <template>
     <Modal id="active-keep">
         <template #modal-body> 
             <div class="container">
                 <div class="row">
                     <div class="col-md-6 p-0">
-                        <img class="w-100 object-fit-cover img-fluid" :src="keep.img" alt=""/>
+                    <img class="w-100 object-fit-cover img-fluid" :title="keep.name" :src="keep.img" alt=""/>
                     </div>
-                    <div class="col-md-6 p-2">
-                        <div class="mt-3 d-flex">
-                            {{keep.name}}
-                            {{keep.description}}
-                            <img @click="goToProfile(keep.creator.id)" class="rounded-circle selectable" :src="keep.creator?.picture" alt=""/>
-                            
+                    <div class="col-md-6">
+                        <div class="row mt-2 pb-4">
+                            <div class="d-flex align-items-center justify-content-around">
+                                <h4>
+                                <i style="color:purple;" class="mdi mdi-eye-plus p-2">{{keep.views}}</i>
+                                <i style="color:purple;" class="mdi mdi-inbox-arrow-down p-2">{{keep.kept}}</i>
+                                </h4>
                             </div>
                         </div>
+
+                        <div class="row text-center">
+                            <div class="pb-5">
+                            <h4>
+                            {{keep.name}}
+                            </h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="pt-5 pb-5 mb-5">
+                        {{keep.description}}
+                            </div>
+                        </div>
+                            <div class="row">
+                                <div class="d-flex selectable justify-content-end align-items-end">
+
+                            <img @click="goToProfile(keep.creator.id)" class="rounded-circle selectable profile-img" :src="keep.creator?.picture" alt=""/>
+                            <div class="ps-1">
+                            {{keep.creator?.name}}
+                            </div>
+                            </div>
+                        </div>
+            <div class="row">
+                <div class="col-4" v-if="account.id">
+                    <button
+                      class="btn dropdown-toggle"
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      title="Add to Vault"
+                      aria-expanded="false"> Add to a Vault
+                    </button>
+                     <ul class="dropdown-menu" 
+                     aria-labelledby="dropdownMenuButton1">
+                    <li 
+                    @click="createVaultKeep(vault.id)"
+                    v-for="pro in profileVaults" :key="pro.id">{{pro.name}}</li>
+                    </ul>
+
+                            </div>
+                        </div>
+
                     </div>
                 </div>
-            
+            </div>
+                            
         </template>
     </Modal>
-    
+      <link rel="stylesheet" href="//cdn.materialdesignicons.com/5.4.55/css/materialdesignicons.min.css">
 </template>
 
 
@@ -29,6 +73,9 @@ import { useRouter } from 'vue-router'
 import { AppState } from '../AppState'
 import { Modal } from 'bootstrap'
 import { router } from '../router'
+import { logger } from '../utils/Logger'
+import Pop from '../utils/Pop'
+import { vaultsService } from '../services/VaultsService'
 export default {
     setup(){
         const router = useRouter()
@@ -36,18 +83,32 @@ export default {
             keep: computed(() => AppState.activeKeep),
             account: computed(() => AppState.account),
             profile: computed(()=> AppState.profile),
+            profileVaults: computed(()=> AppState.profileVaults),
+
             goToProfile(id){
                 Modal.getOrCreateInstance(document.getElementById('active-keep')).hide()
                 router.push({name: 'Profile', params: {id}})
+            },
+
+            async createVaultKeep(keepId, vaultId){
+                try {
+                    await vaultsService.createVaultKeep(keepId, vaultId)
+                } catch (error) {
+                    logger.error(error)
+                    Pop.toast(error.message, 'error')
+                }
             }
-            
            
         }
     }
 }
 </script>
 
-
 <style lang="scss" scoped>
+.profile-img{
+    width: 50px;
+    height: 50px;
+}
+
 
 </style>

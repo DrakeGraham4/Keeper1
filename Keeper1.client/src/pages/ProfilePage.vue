@@ -10,10 +10,17 @@
                     </div>
                     </div>
                     </div>
-                   <h2 style="color:purple;" class="mt-5">Vaults<i @click="createVault" class="mdi mdi-plus selectable"></i></h2>
+                   <h2 style="color:purple;" class="mt-5">Vaults
+                    <i 
+                    v-if="profile.id == account.id"
+                   data-bs-toggle="modal"
+                    data-bs-target="#create-vault"
+                   class="mdi mdi-plus selectable">
+                   </i>
+                   </h2>
                    <div class="row d-flex flex-row"> 
-                    <div v-for="p in profileVaults" :key="p.id" class="col-md-4 p-1" > 
-                    <div class="card bg-primary selectable ">
+                    <div v-for="p in profileVaults" :key="p.id" class="col-md-4 p-1">
+                    <div @click="goToVaultsPage(vault.creator?.id)" class="card bg-primary selectable ">
                         <div class="card-body">
                             {{p.name}}
                         </div>
@@ -30,6 +37,7 @@
             <h2 
             class="mt-4" style="color:purple;">Keeps 
                 <i 
+                v-if="profile.id == account.id"
                 data-bs-toggle="modal"
                 data-bs-target="#create-keep" 
                 class="mdi mdi-plus selectable">
@@ -51,6 +59,10 @@
             <template #modal-title> Create Keep </template>
             <template #modal-body><CreateKeepForm /> </template>
         </Modal>
+        <Modal id="create-vault">
+            <template #modal-title> Create Vault </template>
+            <template #modal-body><CreateVaultForm /> </template>
+        </Modal>
     </div>
       <link rel="stylesheet" href="//cdn.materialdesignicons.com/5.4.55/css/materialdesignicons.min.css">
 </template>
@@ -64,6 +76,7 @@ import Pop from '../utils/Pop'
 import { AppState } from '../AppState'
 import {profilesService} from '../services/ProfilesService.js'
 import {vaultsService} from '../services/VaultsService.js'
+import { router } from '../router'
 export default {
     setup(){
         const route = useRoute()
@@ -80,11 +93,16 @@ export default {
         })
         return {
             
+            goToVaultsPage(id){
+                router.push({name: 'Vault', params: {id}})
+            },
 
             profile: computed(() => AppState.profile),
             keeps: computed(() => AppState.keeps),
             profileVaults: computed(() => AppState.profileVaults),
-            profileKeeps: computed(()=> AppState.profileKeeps)
+            profileKeeps: computed(()=> AppState.profileKeeps),
+            account: computed(() => AppState.account),
+            vault: computed(() => AppState.vaults)
         }
     }
 }
