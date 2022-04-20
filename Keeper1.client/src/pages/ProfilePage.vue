@@ -19,10 +19,11 @@
                    </i>
                    </h2>
                    <div class="row d-flex flex-row"> 
-                    <div v-for="p in profileVaults" :key="p.id" class="col-md-4 p-1">
-                    <div @click="goToVaultsPage(vault.creator?.id)" class="card bg-primary selectable ">
+                    <div v-for="pv in profileVaults" :key="pv.id" class="col-md-4 p-1">
+                    <div @click="goToVaultsPage(pv.id)" class="card bg-primary selectable ">
                         <div class="card-body">
-                            {{p.name}}
+                            <i v-if="pv.isPrivate" class="mdi mdi-lock"></i>
+                            {{pv.name}}
                         </div>
                     </div>
                     </div>
@@ -44,6 +45,7 @@
                 </i>
                 </h2>
             <div class="masonry-with-columns">
+                <!-- TODO Replace this with keep component -->
         <div v-for="pro in profileKeeps" :key="pro.id">
             <div 
             class="card selectable text-white m-3">
@@ -102,7 +104,9 @@ export default {
             profileVaults: computed(() => AppState.profileVaults),
             profileKeeps: computed(()=> AppState.profileKeeps),
             account: computed(() => AppState.account),
-            vault: computed(() => AppState.vaults)
+            vaults: computed(() => AppState.vaults),
+
+            
         }
     }
 }

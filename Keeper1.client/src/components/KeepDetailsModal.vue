@@ -6,6 +6,7 @@
                 <div class="row">
                     <div class="col-md-6 p-0">
                     <img class="w-100 object-fit-cover img-fluid" :title="keep.name" :src="keep.img" alt=""/>
+                    
                     </div>
                     <div class="col-md-6">
                         <div class="row mt-2 pb-4">
@@ -25,8 +26,8 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="pt-5 pb-5 mb-5">
-                        {{keep.description}}
+                            <div class="pt-5 pb-5 mb-5 text-wrap">
+                        <p class="text-break">{{keep.description}}</p>
                             </div>
                         </div>
                             <div class="row">
@@ -37,6 +38,7 @@
                             {{keep.creator?.name}}
                             </div>
                             </div>
+                            <i v-if="keep.creatorId == account.id" @click="deleteKeep(keep.id)" class="mdi mdi-trash-can"></i>
                         </div>
             <div class="row">
                 <div class="col-4" v-if="account.id">
@@ -50,8 +52,11 @@
                      <ul class="dropdown-menu" 
                      aria-labelledby="dropdownMenuButton1">
                     <li 
-                    @click="createVaultKeep(vault.id)"
-                    v-for="pro in profileVaults" :key="pro.id">{{pro.name}}</li>
+                    @click="createVaultKeep(v.id)"
+                    v-for="v in vaults" :key="v.id">
+                    {{v.name}}
+                    </li>
+                    
                     </ul>
 
                             </div>
@@ -76,6 +81,7 @@ import { router } from '../router'
 import { logger } from '../utils/Logger'
 import Pop from '../utils/Pop'
 import { vaultsService } from '../services/VaultsService'
+import { keepsService } from '../services/KeepsService'
 export default {
     setup(){
         const router = useRouter()
@@ -84,18 +90,30 @@ export default {
             account: computed(() => AppState.account),
             profile: computed(()=> AppState.profile),
             profileVaults: computed(()=> AppState.profileVaults),
+            vaults: computed(()=> AppState.vaults),
 
             goToProfile(id){
                 Modal.getOrCreateInstance(document.getElementById('active-keep')).hide()
                 router.push({name: 'Profile', params: {id}})
             },
 
-            async createVaultKeep(keepId, vaultId){
+            async createVaultKeep(vaultId){
+               
+                let data = {
+                    keepId: AppState.activeKeep.id,
+                    vaultId: vaultId
+                }
+                await vaultsService.createVaultKeep(data)
+            },
+
+            async deleteKeep(keepId){
+                logger.log(keepId)
                 try {
-                    await vaultsService.createVaultKeep(keepId, vaultId)
+                    await keepsService.deleteKeep(keepId)
+                    Modal.getOrCreateInstance(document.getElementById('active-keep')).hide()
                 } catch (error) {
                     logger.error(error)
-                    Pop.toast(error.message, 'error')
+                    Pop.toast(error.message)
                 }
             }
            

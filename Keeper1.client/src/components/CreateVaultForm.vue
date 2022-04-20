@@ -26,6 +26,20 @@
         placeholder="Description...">
         </div>
 
+        <div class="form-check ">
+      <label for="isPrivate" class="">Private</label>
+      <input class="form-check-input"
+      type="checkbox"
+        v-model="vault.isPrivate" 
+        name="isPrivate" 
+        id="isPrivate" 
+        >
+       
+        </div>
+
+
+        <!-- TODO Add checkbox for isPrivate -->
+
         <div class="d-flex justify-content-end p-2">
        <button 
         type="submit"
@@ -59,6 +73,7 @@ export default {
             vault,
             async createVault(){
                 try {
+                    logger.log(vault.value)
                     await vaultsService.createVault(vault.value)
                     Modal.getOrCreateInstance(document.getElementById('create-vault')).hide()
                 } catch (error) {

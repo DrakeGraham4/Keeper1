@@ -10,7 +10,10 @@ class AccountService {
     } catch (err) {
       logger.error('HAVE YOU STARTED YOUR SERVER YET???', err)
     }
+
   }
+
+  // TODO Once login is finished, get account vaults, save to AppState vaults
 }
 
 export const accountService = new AccountService()
