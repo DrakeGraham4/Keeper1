@@ -15,12 +15,14 @@
                     v-if="profile.id == account.id"
                    data-bs-toggle="modal"
                     data-bs-target="#create-vault"
-                   class="mdi mdi-plus selectable">
+                   class="mdi mdi-plus selectable"
+                   title="Create Vault" >
+                   
                    </i>
                    </h2>
                    <div class="row d-flex flex-row"> 
                     <div v-for="pv in profileVaults" :key="pv.id" class="col-md-4 p-1">
-                    <div @click="goToVaultsPage(pv.id)" class="card bg-primary selectable ">
+                    <div @click="goToVaultsPage(pv.id)" class="card shadow bg-primary selectable ">
                         <div class="card-body">
                             <i v-if="pv.isPrivate" class="mdi mdi-lock"></i>
                             {{pv.name}}
@@ -41,14 +43,15 @@
                 v-if="profile.id == account.id"
                 data-bs-toggle="modal"
                 data-bs-target="#create-keep" 
-                class="mdi mdi-plus selectable">
+                class="mdi mdi-plus selectable"
+                title="Create Keep" >
                 </i>
                 </h2>
             <div class="masonry-with-columns">
                 <!-- TODO Replace this with keep component -->
         <div v-for="pro in profileKeeps" :key="pro.id">
             <div 
-            class="card selectable text-white m-3">
+            class="card shadow selectable text-white m-3">
             
             <img :src="pro.img" class="card-img object-fit-contain" :alt="pro.name">
             <div class="d-flex justify-content-between align-items-end card-img-overlay">

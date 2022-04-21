@@ -1,6 +1,6 @@
 <template>
 <div 
- class="card selectable text-white m-3" 
+ class="card selectable text-white m-2" 
  data-bs-toggle="modal"
  data-bs-target="#active-keep"
  @click="setActive">
